@@ -16,7 +16,7 @@ $router->add(
     )
 );
 
-/**
+/*
  *  /account/login.json
  */
 $router->addPost(
