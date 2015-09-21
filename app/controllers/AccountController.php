@@ -38,8 +38,34 @@ class AccountController extends ControllerBase
 
             if($user) {
                 if($this->security->checkHash($passwd, $user->password)) {
-                    $this->_status = $user;
+
+                    $this->session->set('account',array(
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'screen_name' => $user->screen_name,
+                    ));
+
+                    /**
+                     *  Token作成 hash(id+name)
+                     */
+                    $token = $this->security->hash($user->id . '+' . $user->name);
+
+                    $this->_status = array(
+                        'status' => true,
+                        'token' => $token
+                    );
+
+                } else {
+                    $this->_status = array(
+                        'status' => false,
+                        'error' => 'Login faild'
+                    );
                 }
+            } else {
+                $this->_status = array(
+                    'status' => false,
+                    'errer' => 'Login faild'
+                );
             }
 
 
