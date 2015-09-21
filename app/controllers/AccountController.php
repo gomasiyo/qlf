@@ -7,17 +7,17 @@ class AccountController extends ControllerBase
 
     public function initialize()
     {
-
-        $this->response->setHeader('Content-Type', 'application/json; charset=utf-8');
-        $this->response->setHeader('Access-Control-Allow-Origin', '*');
         $this->response->setRawHeader('HTTP/1.1 200 OK');
-
-        $this->view->disable();
-
     }
 
     public function loginAction()
     {
+
+        /**
+         *  Header 追加
+         */
+        $this->response->setHeader('Content-Type', 'application/json; charset=utf-8');
+        $this->response->setHeader('Access-Control-Allow-Origin', '*');
 
         /**
          * POST受け取り
@@ -58,16 +58,15 @@ class AccountController extends ControllerBase
                 } else {
                     $this->_status = array(
                         'status' => false,
-                        'error' => 'Login faild'
+                        'error' => 'Login failed'
                     );
                 }
             } else {
                 $this->_status = array(
                     'status' => false,
-                    'errer' => 'Login faild'
+                    'errer' => 'Login failed'
                 );
             }
-
 
         } else {
             $this->_status = array(
@@ -75,6 +74,8 @@ class AccountController extends ControllerBase
                 'error' => 'Argument is not enough'
             );
         }
+
+        $this->view->disable();
 
         return $this->response->setJsonContent($this->_status);
 
