@@ -20,7 +20,7 @@ $router->add(
  *  /account/login.json
  */
 $router->addPost(
-    '/account/login',
+    '/api/account/login',
     array(
         'controller' => 'account',
         'action' => 'login'
