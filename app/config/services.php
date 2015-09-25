@@ -97,7 +97,7 @@ $di->set('flash', function () {
 
 $di->set('security', function () {
     $security = new Security();
-    $security->setWorkFactor(12);
+    $security->setWorkFactor(6);
 
     return $security;
 }, true);
