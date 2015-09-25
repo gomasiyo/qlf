@@ -7,17 +7,17 @@ class AccountController extends ControllerBase
 
     public function initialize()
     {
-        $this->response->setRawHeader('HTTP/1.1 200 OK');
-    }
-
-    public function loginAction()
-    {
-
         /**
          *  Header 追加
          */
         $this->response->setHeader('Content-Type', 'application/json; charset=utf-8');
         $this->response->setHeader('Access-Control-Allow-Origin', '*');
+
+        $this->response->setRawHeader('HTTP/1.1 200 OK');
+    }
+
+    public function loginAction()
+    {
 
         /**
          * POST受け取り
@@ -52,6 +52,9 @@ class AccountController extends ControllerBase
 
                     $this->_status = array(
                         'status' => true,
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'screen_name' => $user->screen_name,
                         'token' => $token
                     );
 
