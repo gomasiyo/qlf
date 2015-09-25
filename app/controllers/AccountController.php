@@ -1,20 +1,7 @@
 <?php
 
-class AccountController extends ControllerBase
+class AccountController extends ControllerAPI
 {
-
-    private $_status;
-
-    public function initialize()
-    {
-        /**
-         *  Header 追加
-         */
-        $this->response->setHeader('Content-Type', 'application/json; charset=utf-8');
-        $this->response->setHeader('Access-Control-Allow-Origin', '*');
-
-        $this->response->setRawHeader('HTTP/1.1 200 OK');
-    }
 
     public function loginAction()
     {
@@ -38,12 +25,6 @@ class AccountController extends ControllerBase
 
             if($user) {
                 if($this->security->checkHash($passwd, $user->password)) {
-
-                    $this->session->set('account',array(
-                        'id' => $user->id,
-                        'name' => $user->name,
-                        'screen_name' => $user->screen_name,
-                    ));
 
                     /**
                      *  Token作成 hash(id+name)
@@ -77,8 +58,6 @@ class AccountController extends ControllerBase
                 'error' => 'Argument is not enough'
             );
         }
-
-        $this->view->disable();
 
         return $this->response->setJsonContent($this->_status);
 
