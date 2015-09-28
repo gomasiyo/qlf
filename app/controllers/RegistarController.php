@@ -25,6 +25,7 @@ class RegistarController extends ControllerAPI
                     'screen_name' => $screen_name,
                     'password' => $this->security->hash($passwd)
                 ));
+
                 if($users->save()) {
 
                     $dashbord = new Dashboard();
@@ -34,6 +35,7 @@ class RegistarController extends ControllerAPI
                         'title' => 'Default',
                         'default' => 1
                     ));
+
                     if($dashbord->save()) {
                         $this->_status = array(
                             'status' => true
