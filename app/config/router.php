@@ -11,8 +11,8 @@ $router = new \Phalcon\Mvc\Router(false);
 $router->add(
     '/',
     array(
-        'controller' => 'index',
-        'action' => 'index'
+        'controller' => 'registar',
+        'action' => 'signup'
     )
 );
 
