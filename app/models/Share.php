@@ -19,6 +19,12 @@ class Share extends \Phalcon\Mvc\Model
      *
      * @var string
      */
+    public $urls;
+
+    /**
+     *
+     * @var string
+     */
     public $pin;
 
     /**
