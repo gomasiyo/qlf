@@ -17,7 +17,7 @@ $router->add(
 );
 
 /*
- *  /account/login.json
+ *  /api/account/login.json
  */
 $router->addPost(
     '/api/account/login',
@@ -27,6 +27,16 @@ $router->addPost(
     )
 );
 
+/*
+ *  /api/account/signup
+ */
+$router->addPost(
+    '/api/account/signup',
+    array(
+        'controller' => 'registar',
+        'action' => 'signup'
+    )
+);
 $router->notFound(
     array(
         'controller' => 'status',

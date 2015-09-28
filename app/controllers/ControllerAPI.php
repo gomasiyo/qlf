@@ -5,6 +5,9 @@ use Phalcon\Mvc\Controller;
 class ControllerAPI extends Controller
 {
 
+    /**
+     *  ステータス用の保管庫
+     */
     protected $_status;
 
     public function initialize()

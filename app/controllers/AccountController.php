@@ -12,7 +12,7 @@ class AccountController extends ControllerAPI
         $name = $this->request->getPost('name');
         $passwd = $this->request->getPost('passwd');
 
-        if(!empty($name) && !empty($passwd)) {
+        if(!(empty($name) || empty($passwd))) {
 
             $user = Users::findFirst(
                 array(
