@@ -1,6 +1,6 @@
 <?php
 
-class registerController extends ControllerAPI
+class RegisterController extends ControllerAPI
 {
 
     public function signupAction()
