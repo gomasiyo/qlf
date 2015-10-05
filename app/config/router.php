@@ -37,6 +37,19 @@ $router->addPost(
         'action' => 'signup'
     )
 );
+
+
+/*
+ *  /api/list
+ */
+$router->addPost(
+    '/api/list',
+    array(
+        'controller' => 'lists',
+        'action' => 'add'
+    )
+);
+
 $router->notFound(
     array(
         'controller' => 'status',
