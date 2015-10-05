@@ -11,8 +11,8 @@ $router = new \Phalcon\Mvc\Router(false);
 $router->add(
     '/',
     array(
-        'controller' => 'index',
-        'action' => 'index'
+        'controller' => 'register',
+        'action' => 'signup'
     )
 );
 
@@ -33,7 +33,7 @@ $router->addPost(
 $router->addPost(
     '/api/account/signup',
     array(
-        'controller' => 'registar',
+        'controller' => 'register',
         'action' => 'signup'
     )
 );

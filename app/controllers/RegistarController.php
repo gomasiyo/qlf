@@ -1,6 +1,6 @@
 <?php
 
-class RegistarController extends ControllerAPI
+class RegisterController extends ControllerAPI
 {
 
     public function signupAction()
@@ -25,10 +25,28 @@ class RegistarController extends ControllerAPI
                     'screen_name' => $screen_name,
                     'password' => $this->security->hash($passwd)
                 ));
+
                 if($users->save()) {
-                    $this->_status = array(
-                        'status' => true
-                    );
+
+                    $dashbord = new Dashboard();
+                    $users = Users::findFirstByName($name);
+                    $dashbord->assign(array(
+                        'users_id' => $users->id,
+                        'title' => 'Default',
+                        'default' => 1
+                    ));
+
+                    if($dashbord->save()) {
+                        $this->_status = array(
+                            'status' => true
+                        );
+                    } else {
+                        $this->_status = array(
+                            'status' => false,
+                            'error' => 'Unknow Error'
+                        );
+                    }
+
                 } else {
                     $this->_status = array(
                         'status' => false,
