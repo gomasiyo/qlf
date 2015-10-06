@@ -17,7 +17,7 @@ $router->add(
 );
 
 /*
- *  /api/account/login.json
+ *  /api/account/login
  */
 $router->addPost(
     '/api/account/login',
