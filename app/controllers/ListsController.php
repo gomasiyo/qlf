@@ -61,7 +61,7 @@ class ListsController extends ControllerAPI
                             );
 
                             if(!empty($dashboard)) {
-
+                                $dashboard_id = $dashbord->id;
                             } else {
                                 $this->_status = array(
                                     'status' => false,
@@ -81,6 +81,16 @@ class ListsController extends ControllerAPI
                             )
                         );
 
+                        if($urls->save()) {
+                            $this->_status = array(
+                                'status' => true
+                            );
+                        } else {
+                            $this->_status = array(
+                                'status' => false,
+                                'error' => 'Unknow Error'
+                            );
+                        }
 
                     } else {
                         $this->_status = array(
@@ -143,7 +153,7 @@ class ListsController extends ControllerAPI
      */
     private function _isURL($url)
     {
-        return !!preg_match('/(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/', $url);
+        return (bool)preg_match('/(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/', $url);
     }
 
 }
