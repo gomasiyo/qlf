@@ -47,6 +47,8 @@ class ControllerAPI extends Controller
     {
         if(!(empty($this->_id) || empty($this->_name) || empty($this->_token))) {
             return $this->security->checkHash($this->_id . '+' . $this->_name, $this->_token);
+        } else {
+            return false;
         }
     }
 
