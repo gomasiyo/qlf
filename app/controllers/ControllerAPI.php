@@ -33,6 +33,13 @@ class ControllerAPI extends Controller
         $this->_token = $this->request->getPost('token', null, null);
 
         /**
+         *  Status内容
+         */
+        $this->_status = [
+            'status' => true
+        ];
+
+        /**
          *  View 非ロード
          */
         $this->view->disable();
