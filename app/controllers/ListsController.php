@@ -17,7 +17,7 @@ class ListsController extends ControllerAPI
     /**
      *  [POST]リストの登録メゾット
      *
-     *  Endpoint POST /apo/addList
+     *  Endpoint POST /api/addList
      *
      *  @access public
      *  @return JSON Responce
