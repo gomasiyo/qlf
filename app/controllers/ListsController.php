@@ -25,12 +25,14 @@ class ListsController extends ControllerAPI
     public function addAction()
     {
 
-        $dashboard_id = $this->request->getPost('dashboard', null, null);
-        $list = $this->request->getPost('list', null, null);
-
-        if(empty($list)) {
-            $this->_status['status'] = false;
-            $this->_status['error'] = 'Argument is not enough';
+        $post = [
+            'dashboard' => false,
+            'list' => true
+        ];
+        if($this->_getPost($post)) {
+            $this->_status['response']['status'] = false;
+            $this->_status['response']['code'] = 201;
+            $this->_status['response']['detail'] = $post['empty'];
         }
 
         $templateList = [
@@ -43,22 +45,23 @@ class ListsController extends ControllerAPI
             'title',
             'url'
         ];
-        if($this->_status['status'] && !$this->_mergeArray($list, $templateList, $conditions)) {
-            $this->_status['status'] = false;
-            $this->_status['error'] = 'JSON Argument is not enough';
+        if($this->_status['response']['status'] && !$this->_mergeArray($this->_post['list'], $templateList, $conditions)) {
+            $this->_status['response']['status'] = false;
+            $this->_status['response']['code'] = '202';
+            $this->_status['response']['detail'] = $conditions;
         }
 
-        if($this->_status['status'] && !$this->_checkToken()) {
-            $this->_status['status'] = false;
-            $this->_status['error'] = 'Login Failed';
+        if($this->_status['response']['status'] && $this->_checkToken()) {
+            $this->_status['response']['status'] = false;
+            $this->_status['response']['code'] = 301;
         }
 
-        if($this->_status['status'] && !$this->_isURL($list['url'])) {
-            $this->_status['status'] = false;
-            $this->_status['error'] = 'URL is Not';
+        if($this->_status['response']['status'] && !$this->_isURL($this->_post['list']['url'])) {
+            $this->_status['response']['status'] = false;
+            $this->_status['response']['code'] = 203;
         }
 
-        if(!$this->_status['status']) {
+        if(!$this->_status['response']['status']) {
             return $this->response->setJsonContent($this->_status);
         }
 
@@ -89,8 +92,8 @@ class ListsController extends ControllerAPI
             );
 
             if(empty($dashboard)) {
-                $this->_status['status'] = false;
-                $this->_status['error'] = 'DashboardID can not be found';
+                $this->_status['response']['status'] = false;
+                $this->_status['response']['code'] = 204;
                 return $this->response->setJsonContent($this->_status);
             }
 
@@ -100,16 +103,16 @@ class ListsController extends ControllerAPI
         $urls->assign(
             [
                 'dashboard_id' => $dashboard_id,
-                'tags_id' => $list['tags_id'],
-                'title' => $list['title'],
-                'comment' => $list['comment'],
-                'url' => $list['url']
+                'tags_id' => $this->_post['list']['tags_id'],
+                'title' => $this->_post['list']['title'],
+                'comment' => $this->_post['list']['comment'],
+                'url' => $this->_post['list']['url']
             ]
         );
 
         if(!$urls->save()) {
-            $this->_status['status'] = false;
-            $this->_status['error'] = 'Unknow Error';
+            $this->_status['response']['status'] = false;
+            $this->_status['response']['code'] = 101;
         }
 
         return $this->response->setJsonContent($this->_status);
@@ -124,21 +127,20 @@ class ListsController extends ControllerAPI
      *      リスト
      *  @param array $templateList
      *      リストのテンプレート
-     *  @param array $conditions
+     *  @param array &$conditions
      *      リストの必要項目
      *  @return boolean
      */
-    private function _mergeArray(&$list, $templateList, $conditions)
+    private function _mergeArray(&$list, $templateList, &$conditions)
     {
         $json = json_decode($list, true);
         $list = array_merge($templateList, $json);
-        $status = true;
+        $status = [];
         foreach($conditions as $key) {
-            if($status) {
-                $status = !empty($list[$key]);
-            }
+            if(empty($list[$key])) $status[] = $key;
         }
-        return $status;
+        $conditions = $status;
+        return empty($status);
     }
 
     /**
