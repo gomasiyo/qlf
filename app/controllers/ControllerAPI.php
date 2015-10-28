@@ -9,12 +9,13 @@ class ControllerAPI extends Controller
      *  ステータス用の保管庫
      */
     protected $_status;
+    protected $_post;
     protected $_id;
     protected $_name;
     protected $_token;
 
     /**
-     * ログイン用POST保存
+     *  ログイン用POST保存
      */
     public function initialize()
     {
@@ -36,7 +37,9 @@ class ControllerAPI extends Controller
          *  Status内容
          */
         $this->_status = [
-            'status' => true
+            'response' => [
+                'status' => true
+            ]
         ];
 
         /**
@@ -48,15 +51,43 @@ class ControllerAPI extends Controller
 
     /**
      *  Tokenチェック
+     *
+     *  @access protected
      *  @return boolean
      */
     protected function _checkToken()
     {
         if(!(empty($this->_id) || empty($this->_name) || empty($this->_token))) {
-            return $this->security->checkHash($this->_id . '+' . $this->_name, $this->_token);
+            return !$this->security->checkHash($this->_id . '+' . $this->_name, $this->_token);
         } else {
-            return false;
+            return true;
         }
+    }
+
+    /**
+     *  Post取得及びチェック
+     *
+     *  @access protected
+     *  @param array &$post
+     *      POSTデータ
+     *  @return boolean
+     */
+    protected function _getPost(&$post)
+    {
+        $result = [
+            'status' => false,
+        ];
+        foreach($post as $key => $val) {
+            $this->_post[$key] = $this->request->getPost($key, null, null);
+            if($val) {
+                if(empty($this->_post[$key])) {
+                    $result['status'] = true;
+                    $result['empty'][] = $key;
+                }
+            }
+        }
+        $post = $result;
+        return $result['status'];
     }
 
 }
