@@ -69,10 +69,9 @@ class ListsController extends ControllerAPI
 
             $dashboard = Dashboard::findFirst(
                 [
-                    'users_id = ?1 AND default = ?2',
+                    'users_id = ?1 AND default = true',
                     'bind' => [
                         1 => $this->_id,
-                        2 => true
                     ]
                 ]
             );
@@ -103,7 +102,6 @@ class ListsController extends ControllerAPI
         $urls->assign(
             [
                 'dashboard_id' => $dashboard_id,
-                'tags_id' => $this->_post['list']['tags_id'],
                 'title' => $this->_post['list']['title'],
                 'comment' => $this->_post['list']['comment'],
                 'url' => $this->_post['list']['url']
@@ -112,7 +110,25 @@ class ListsController extends ControllerAPI
 
         if(!$urls->save()) {
             $this->_status['response']['status'] = false;
-            $this->_status['response']['code'] = 101;
+            $this->_status['response']['code'] = 102;
+        }
+
+        if(!empty($this->_post['list']['tag'])) {
+
+            $tags = new Tags();
+            $tags->assign(
+                [
+                    'tag' => $this->_post['list']['tag'],
+                    'urls_id' => $urls->id
+                ]
+            );
+
+            if(!$tags->save()) {
+                $this->_status['response']['status'] = false;
+                $this->_status['response']['code'] = 102;
+                $this->response->setJsonContent($this->_status);
+            }
+
         }
 
         return $this->response->setJsonContent($this->_status);
