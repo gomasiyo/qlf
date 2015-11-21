@@ -111,6 +111,7 @@ class ListsController extends ControllerAPI
         if(!$urls->save()) {
             $this->_status['response']['status'] = false;
             $this->_status['response']['code'] = 102;
+            return $this->response->setJsonContent($this->_status);
         }
 
         if(!empty($this->_post['list']['tag'])) {
