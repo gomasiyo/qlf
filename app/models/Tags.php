@@ -11,23 +11,22 @@ class Tags extends \Phalcon\Mvc\Model
 
     /**
      *
-     * @var integer
+     * @var string
      */
-    public $users_id;
+    public $tag;
 
     /**
      *
-     * @var string
+     * @var integer
      */
-    public $name;
+    public $urls_id;
 
     /**
      * Initialize method for model.
      */
     public function initialize()
     {
-        $this->hasMany('id', 'Urls', 'tags_id', array('alias' => 'Urls'));
-        $this->belongsTo('users_id', 'Users', 'id', array('alias' => 'Users'));
+        $this->belongsTo('urls_id', 'Urls', 'id', array('alias' => 'Urls'));
     }
 
     /**

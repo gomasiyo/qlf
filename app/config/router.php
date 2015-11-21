@@ -40,10 +40,10 @@ $router->addPost(
 
 
 /*
- *  /api/list
+ *  /api/lists/add
  */
 $router->addPost(
-    '/api/list',
+    '/api/lists/add',
     array(
         'controller' => 'lists',
         'action' => 'add'
