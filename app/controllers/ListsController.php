@@ -141,6 +141,55 @@ class ListsController extends ControllerAPI
     }
 
     /**
+     *  [POST]リストの全件取得
+     *
+     *  Endpoint POST /api/lists/all
+     *
+     *  @access public
+     *  @return JSON Responce
+     */
+    public function allAction()
+    {
+
+        if($this->_status['response']['status'] && $this->_checkToken()) {
+            $this->_status['response']['status'] = false;
+            $this->_status['response']['code'] = 301;
+        }
+
+        if(!$this->_status['response']['status']) {
+            return $this->response->setJsonContent($this->_status);
+        }
+
+        foreach(Dashboard::findByUsers_id($this->_id) as $dbKey => $dashboard) {
+
+            $this->_status['response']['lists'][$dbKey]['dashboard'] = [
+                'id' => $dashboard->id,
+                'title' => $dashboard->title,
+                'comment' => $dashboard->comments,
+                'default' => (bool)$dashboard->default
+            ];
+
+            foreach($dashboard->Urls as $uKey => $urls) {
+                $this->_status['response']['lists'][$dbKey]['urls'][$uKey] = [
+                    'id' => $urls->id,
+                    'title' => $urls->title,
+                    'comment' => $urls->comment,
+                    'url' => $urls->url,
+                    'tags' => []
+                ];
+
+                foreach($urls->Tags as $tags) {
+                    $this->_status['response']['lists'][$dbKey]['urls'][$uKey]['tags'][] = $tags->tag;
+                }
+
+            }
+        }
+
+        return $this->response->setJsonContent($this->_status);
+
+    }
+
+    /**
      *  Listのマージ及び必要項目のNullチェック
      *
      *  @access private
