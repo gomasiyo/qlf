@@ -25,11 +25,16 @@ class ListsController extends ControllerAPI
     public function addAction()
     {
 
+        if($this->_status['response']['status'] && $this->_checkToken()) {
+            $this->_status['response']['status'] = false;
+            $this->_status['response']['code'] = 301;
+        }
+
         $post = [
             'dashboard' => false,
             'list' => true
         ];
-        if($this->_getPost($post)) {
+        if($this->_status['response']['status'] && $this->_getPost($post)) {
             $this->_status['response']['status'] = false;
             $this->_status['response']['code'] = 201;
             $this->_status['response']['detail'] = $post['empty'];
@@ -47,13 +52,8 @@ class ListsController extends ControllerAPI
         ];
         if($this->_status['response']['status'] && !$this->_mergeArray($this->_post['list'], $templateList, $conditions)) {
             $this->_status['response']['status'] = false;
-            $this->_status['response']['code'] = '202';
+            $this->_status['response']['code'] = 202;
             $this->_status['response']['detail'] = $conditions;
-        }
-
-        if($this->_status['response']['status'] && $this->_checkToken()) {
-            $this->_status['response']['status'] = false;
-            $this->_status['response']['code'] = 301;
         }
 
         if($this->_status['response']['status'] && !$this->_isURL($this->_post['list']['url'])) {

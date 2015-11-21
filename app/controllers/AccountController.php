@@ -41,12 +41,12 @@ class AccountController extends ControllerAPI
 
 
         $user = Users::findFirst(
-            array(
+            [
                 'name = ?1 OR email = ?1',
-                'bind' => array(
+                'bind' => array[
                     1 => $this->_post['name']
-                )
-            )
+                ]
+            ]
         );
 
         if(!$user || !$this->security->checkHash($this->_post['passwd'], $user->password)) {
@@ -58,13 +58,13 @@ class AccountController extends ControllerAPI
 
         $token = $this->security->hash($user->id . '+' . $user->name);
 
-        $result = array(
+        $result = [
             'status' => true,
             'id' => $user->id,
             'name' => $user->name,
             'screen_name' => $user->screen_name,
             'token' => $token
-        );
+        ];
 
         $this->_status['result'] = $result;
 
