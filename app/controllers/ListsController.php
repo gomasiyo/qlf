@@ -115,18 +115,22 @@ class ListsController extends ControllerAPI
 
         if(!empty($this->_post['list']['tag'])) {
 
-            $tags = new Tags();
-            $tags->assign(
-                [
-                    'tag' => $this->_post['list']['tag'],
-                    'urls_id' => $urls->id
-                ]
-            );
+            foreach($this->_post['list']['tag'] as $tag) {
 
-            if(!$tags->save()) {
-                $this->_status['response']['status'] = false;
-                $this->_status['response']['code'] = 102;
-                $this->response->setJsonContent($this->_status);
+                $tags = new Tags();
+                $tags->assign(
+                    [
+                        'tag' => $tag,
+                        'urls_id' => $urls->id
+                    ]
+                );
+
+                if(!$tags->save()) {
+                    $this->_status['response']['status'] = false;
+                    $this->_status['response']['code'] = 102;
+                    return $this->response->setJsonContent($this->_status);
+                }
+
             }
 
         }
