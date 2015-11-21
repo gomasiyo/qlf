@@ -38,7 +38,6 @@ $router->addPost(
     )
 );
 
-
 /*
  *  /api/lists/add
  */
@@ -47,6 +46,17 @@ $router->addPost(
     array(
         'controller' => 'lists',
         'action' => 'add'
+    )
+);
+
+/*
+ *  /api/lists/add
+ */
+$router->addPost(
+    '/api/lists/all',
+    array(
+        'controller' => 'lists',
+        'action' => 'all'
     )
 );
 

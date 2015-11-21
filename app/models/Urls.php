@@ -17,12 +17,6 @@ class Urls extends \Phalcon\Mvc\Model
 
     /**
      *
-     * @var integer
-     */
-    public $tags_id;
-
-    /**
-     *
      * @var string
      */
     public $title;
@@ -44,8 +38,8 @@ class Urls extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
+        $this->hasMany('id', 'Tags', 'urls_id', array('alias' => 'Tags'));
         $this->belongsTo('dashboard_id', 'Dashboard', 'id', array('alias' => 'Dashboard'));
-        $this->belongsTo('tags_id', 'Tags', 'id', array('alias' => 'Tags'));
     }
 
     /**
