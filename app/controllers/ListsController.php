@@ -190,30 +190,6 @@ class ListsController extends ControllerAPI
     }
 
     /**
-     *  Listのマージ及び必要項目のNullチェック
-     *
-     *  @access private
-     *  @param JSON &$list
-     *      リスト
-     *  @param array $templateList
-     *      リストのテンプレート
-     *  @param array &$conditions
-     *      リストの必要項目
-     *  @return boolean
-     */
-    private function _mergeArray(&$list, $templateList, &$conditions)
-    {
-        $json = json_decode($list, true);
-        $list = array_merge($templateList, $json);
-        $status = [];
-        foreach($conditions as $key) {
-            if(empty($list[$key])) $status[] = $key;
-        }
-        $conditions = $status;
-        return empty($status);
-    }
-
-    /**
      *  URL チェック
      *
      *  @access private
