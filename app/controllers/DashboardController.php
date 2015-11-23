@@ -24,7 +24,7 @@ class DashboardController extends ControllerAPI
     public function createAction()
     {
 
-        if($this->_status['response']['status'] && $this->_checkToken()) {
+        if($this->_status['response']['status'] && !$this->_checkToken()) {
             $this->_status['response']['status'] = false;
             $this->_status['response']['code'] = 301;
         }
@@ -32,7 +32,7 @@ class DashboardController extends ControllerAPI
         $post = [
             'detail' => true
         ];
-        if($this->_status['response']['status'] && $this->_getPost($post)) {
+        if($this->_status['response']['status'] && !$this->_getPost($post)) {
             $this->_status['response']['status'] = false;
             $this->_status['response']['code'] = 201;
             $this->_status['response']['detail'] = $post['empty'];
@@ -87,6 +87,74 @@ class DashboardController extends ControllerAPI
 
         return $this->response->setJsonContent($this->_status);
 
+    }
+
+    /**
+     *  [POST]ダッシュボードのマージメソッド
+     *
+     *  Endpoint POST /api/dashboad/marge/:int(origin)/:int(target)
+     *
+     *  @access public
+     *  @return JSON Responce
+     */
+    public function margeAction()
+    {
+
+        if($this->_status['response']['status'] && !$this->_checkToken()) {
+            $this->_status['response']['status'] = false;
+            $this->_status['response']['code'] = 301;
+        }
+
+        if($this->_status['response']['status'] && (!$this->_checkDashboard($this->dispatcher->getParam('origin')) || !$this->_checkDashboard($this->dispatcher->getParam('target')))) {
+            $this->_status['response']['status'] = false;
+            $this->_status['response']['code'] = 101;
+        }
+
+        if(!$this->_status['response']['status']) {
+            return $this->response->setJsonContent($this->_status);
+        }
+
+        $urls = Urls::findByDashboard_id($this->dispatcher->getParam('target'));
+
+        if($urls->count() == 0) {
+                $this->_status['response']['status'] = false;
+                $this->_status['response']['code'] = 103;
+                return $this->response->setJsonContent($this->_status);
+        }
+
+        foreach($urls as $url) {
+            $url->dashboard_id = $this->dispatcher->getParam('origin');
+            if(!$url->save()) {
+                $this->_status['response']['status'] = false;
+                $this->_status['response']['code'] = 102;
+                return $this->response->setJsonContent($this->_status);
+            }
+        }
+
+        return $this->response->setJsonContent($this->_status);
+
+    }
+
+    /**
+     *  ダッシュボード詳細チェック
+     *
+     *  @param int $id
+     *  @access private
+     *  @return boolean
+     */
+    private function _checkDashboard($id = null)
+    {
+        if(empty($id)) return false;
+        $dashboard = Dashboard::findFirst(
+            [
+                    'users_id = ?1 AND id = ?2',
+                    'bind' => [
+                        1 => $this->_id,
+                        2 => $id
+                    ]
+            ]
+        );
+        return !empty($dashboard);
     }
 
 }

@@ -50,6 +50,19 @@ $router->addPost(
 );
 
 /**
+ *  /api/dashboard/marge/([0-9]+)/([0-9]+)
+ */
+$router->addPost(
+    '/api/dashboard/marge/:int/:int',
+    [
+        'controller' => 'dashboard',
+        'action' => 'marge',
+        'origin' => 1,
+        'target' => 2
+    ]
+);
+
+/**
  *  /api/lists/add
  */
 $router->addPost(
