@@ -29,7 +29,7 @@ class AccountController extends ControllerAPI
             'name' => true,
             'passwd' => true
         ];
-        if($this->_getPost($post)) {
+        if(!$this->_getPost($post)) {
             $this->_status['response']['status'] = false;
             $this->_status['response']['code'] = 201;
             $this->_status['response']['detail'] = $post['empty'];
@@ -43,7 +43,7 @@ class AccountController extends ControllerAPI
         $user = Users::findFirst(
             [
                 'name = ?1 OR email = ?1',
-                'bind' => array[
+                'bind' => [
                     1 => $this->_post['name']
                 ]
             ]

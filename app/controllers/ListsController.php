@@ -25,7 +25,7 @@ class ListsController extends ControllerAPI
     public function addAction()
     {
 
-        if($this->_status['response']['status'] && $this->_checkToken()) {
+        if($this->_status['response']['status'] && !$this->_checkToken()) {
             $this->_status['response']['status'] = false;
             $this->_status['response']['code'] = 301;
         }
@@ -34,7 +34,7 @@ class ListsController extends ControllerAPI
             'dashboard' => false,
             'list' => true
         ];
-        if($this->_status['response']['status'] && $this->_getPost($post)) {
+        if($this->_status['response']['status'] && !$this->_getPost($post)) {
             $this->_status['response']['status'] = false;
             $this->_status['response']['code'] = 201;
             $this->_status['response']['detail'] = $post['empty'];

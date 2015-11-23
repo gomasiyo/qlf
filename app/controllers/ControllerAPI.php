@@ -58,9 +58,9 @@ class ControllerAPI extends Controller
     protected function _checkToken()
     {
         if(!(empty($this->_id) || empty($this->_name) || empty($this->_token))) {
-            return !$this->security->checkHash($this->_id . '+' . $this->_name, $this->_token);
+            return $this->security->checkHash($this->_id . '+' . $this->_name, $this->_token);
         } else {
-            return true;
+            return false;
         }
     }
 
@@ -75,13 +75,13 @@ class ControllerAPI extends Controller
     protected function _getPost(&$post)
     {
         $result = [
-            'status' => false,
+            'status' => true,
         ];
         foreach($post as $key => $val) {
             $this->_post[$key] = $this->request->getPost($key, null, null);
             if($val) {
                 if(empty($this->_post[$key])) {
-                    $result['status'] = true;
+                    $result['status'] = false;
                     $result['empty'][] = $key;
                 }
             }

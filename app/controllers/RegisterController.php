@@ -31,7 +31,7 @@ class RegisterController extends ControllerAPI
             'passwd' => true,
             'screenname' => true
         ];
-        if($this->_getPost($post)) {
+        if(!$this->_getPost($post)) {
             $this->_status['response']['status'] = false;
             $this->_status['response']['code'] = 201;
             $this->_status['response']['detail'] = $post['empty'];
